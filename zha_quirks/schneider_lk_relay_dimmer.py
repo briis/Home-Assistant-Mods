@@ -21,13 +21,12 @@ Decoupling a button from its relay (tested on LK Switch firmware 0x010218ff):
   apart by endpoint_id. No hold/release events in this mode.
 
 LK Dimmer: only the top row is linked to the load, through a normal Zigbee
-binding (endpoints 21/22 -> 3). For press and hold events from the bottom row
-without touching the light: S3 = "Dimmer", S4 = "DimmerOpposite", unbind the
-dimmer from itself, then re-bind only the top row with the temporary quirk in
-temp-rebind/ (see zha_quirks/README.md). For press only, "Scene" mode also
-works, but the dimmer then recalls its own scenes 1/2 and still switches the
-light, so set the up and down scene IDs to scenes it doesn't have (101 on S3,
-102 on S4).
+binding (endpoints 21/22 -> 3). The bottom row has no binding to the load and
+by default only switches it through the scene recall in "Scene" mode. Set
+S3 = "Dimmer" and S4 = "DimmerOpposite" and the bottom row sends on/off,
+move and stop events without touching the light (press and hold). For press
+only, "Scene" mode with the up and down scene IDs set to scenes the dimmer
+doesn't have (101 on S3, 102 on S4) also works.
 
 All settings are stored on the device and survive HA/ZHA restarts.
 """

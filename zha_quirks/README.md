@@ -26,16 +26,10 @@ Set **Switch actions S3** and **S4** to `Scene`. The bottom row then sends a Sce
 
 ### LK Dimmer: press and hold (dimming)
 
-On the dimmer, only the top row is linked to the load, through a normal Zigbee binding (endpoints 21/22 to endpoint 3). With the bottom row in dimmer mode and without that binding, it sends `on`/`off`, `move`/`move_with_on_off` and `stop_with_on_off` events without touching the light.
+Set **Switch actions S3** to `Dimmer` and **Switch actions S4** to `DimmerOpposite` (same as the top row). The bottom row then sends `on`/`off`, `move`/`move_with_on_off` and `stop_with_on_off` events without touching the light.
 
-1. Set **Switch actions S3** to `Dimmer` and **Switch actions S4** to `DimmerOpposite` (same as the top row).
-2. Remove the dimmer's bindings to itself: WebSocket command `zha/devices/unbind` with the dimmer's IEEE as both `source_ieee` and `target_ieee`. The top row stops controlling the light at this point.
-3. Put the temporary quirk from [`temp-rebind/schneider_lk_relay_dimmer.py`](temp-rebind/schneider_lk_relay_dimmer.py) in place of the normal one and restart. It hides the bottom row's on/off and dim clusters from ZHA.
-4. Bind the dimmer to itself: `zha/devices/bind` with the same IEEE as source and target. Because of the temporary quirk, only the top row (21/22) is bound.
-5. Put the normal quirk back and restart.
+This works because only the top row is linked to the dimmer's load, through a normal Zigbee binding (endpoints 21/22 to endpoint 3). The bottom row has no binding to the load; out of the box it is in `Scene` mode and switches the light by recalling the dimmer's stored scenes 1 and 2.
 
-ZHA can only bind or unbind all button endpoints of a device at once, which is why the temporary quirk is needed. With several dimmers, do step 2 for all of them, then steps 3 to 5 once. A ZHA group binding doesn't work as an alternative: the dimmer ignores group commands it sends itself.
-
-If you only need presses, the simpler option is `Scene` mode as on the LK Switch. Then also set **Up scene ID S3** and **Down scene ID S3** to `101`, and **Up scene ID S4** and **Down scene ID S4** to `102`. By default the dimmer recalls its own stored scenes 1 and 2, which still switch the light.
+If you only need presses, you can also use `Scene` mode as on the LK Switch. Then set **Up scene ID S3** and **Down scene ID S3** to `101`, and **Up scene ID S4** and **Down scene ID S4** to `102`, so the dimmer doesn't recall its own scenes 1 and 2.
 
 The [Schneider LK Bottom Row Generic Actions](https://github.com/briis/home-assistant-blueprints) blueprint uses these events.
