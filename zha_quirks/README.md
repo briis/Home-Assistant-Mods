@@ -32,4 +32,4 @@ This works because only the top row is linked to the dimmer's load, through a no
 
 If you only need presses, you can also use `Scene` mode as on the LK Switch. Then set **Up scene ID S3** and **Down scene ID S3** to `101`, and **Up scene ID S4** and **Down scene ID S4** to `102`, so the dimmer doesn't recall its own scenes 1 and 2.
 
-The [Schneider LK Bottom Row Generic Actions](https://github.com/briis/home-assistant-blueprints) blueprint uses these events.
+The [Schneider LK Dimmer & Relay Bottom Row Actions](https://github.com/briis/home-assistant-blueprints) blueprint uses these events.
